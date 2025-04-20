@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "^/$",
+      "dest": "/404.html",
+      "status": 404
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/proxy"
+    }
+  ],
+  "functions": {
+    "api/proxy.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
+}
