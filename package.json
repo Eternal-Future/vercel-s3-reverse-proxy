@@ -1,0 +1,21 @@
+{
+  "name": "vercel-s3-reverse-proxy",
+  "version": "1.0.0",
+  "description": "反向代理到S3存储桶，访问根目录时返回404页面",
+  "main": "api/proxy.js",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel deploy"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "vercel": "^28.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT"
+}
