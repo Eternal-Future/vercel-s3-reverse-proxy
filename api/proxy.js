@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const { parse } = require('url');
+const fs = require('fs');
+const path = require('path');
 
 // 获取环境变量中的目标URL，默认为https://object-storage.example.com
 const target = process.env.PROXY_TARGET || 'https://object-storage.example.com';
@@ -10,8 +12,9 @@ module.exports = async (req, res) => {
     
     // 如果是根路径，返回404页面
     if (pathname === '/' || pathname === '') {
-      // 使用index.html作为404页面
-      return res.status(404).send('Not Found');
+      // 读取404.html页面内容
+      const notFoundPage = fs.readFileSync(path.join(__dirname, '../404.html'), 'utf8');
+      return res.status(404).setHeader('Content-Type', 'text/html').send(notFoundPage);
     }
     
     // 构建目标URL
@@ -41,7 +44,8 @@ module.exports = async (req, res) => {
       // 检查是否包含NoSuchKey错误
       if (responseText.includes('<Code>NoSuchKey</Code>')) {
         // 返回自定义404页面
-        return res.status(404).send('Not Found');
+        const notFoundPage = fs.readFileSync(path.join(__dirname, '../404.html'), 'utf8');
+        return res.status(404).setHeader('Content-Type', 'text/html').send(notFoundPage);
       }
       
       // 如果不是NoSuchKey错误，返回原始响应
