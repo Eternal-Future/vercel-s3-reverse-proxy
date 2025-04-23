@@ -32,6 +32,22 @@ module.exports = async (req, res) => {
       redirect: 'manual'
     });
     
+    // 检查是否是MinIO的NoSuchKey错误
+    const contentType = proxyRes.headers.get('content-type');
+    if (proxyRes.status === 404 || 
+        (contentType && contentType.includes('application/xml') && proxyRes.status === 200)) {
+      const responseText = await proxyRes.text();
+      
+      // 检查是否包含NoSuchKey错误
+      if (responseText.includes('<Code>NoSuchKey</Code>')) {
+        // 返回自定义404页面
+        return res.status(404).send('Not Found');
+      }
+      
+      // 如果不是NoSuchKey错误，返回原始响应
+      return res.status(proxyRes.status).send(responseText);
+    }
+    
     // 设置响应状态码
     res.status(proxyRes.status);
     
